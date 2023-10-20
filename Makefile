@@ -41,6 +41,10 @@ install: $(TARGET)
 	cp libipc_framework.so $(DESTDIR)/usr/lib/x86_64-linux-gnu/
 	cp include/* $(DESTDIR)/usr/include/IPC-framework/
 
+uninstall:
+	- rm -r $(DESTDIR)/usr/include/IPC-framework
+	- rm $(DESTDIR)/usr/lib/x86_64-linux-gnu/libipc_framework.so
+
 clean:
 	- find -name *.o | xargs -I {} rm {}
 	- find -name *.out | xargs -I {} rm {}
