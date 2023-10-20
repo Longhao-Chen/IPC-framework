@@ -8,7 +8,7 @@
 ROOT_DIR = $(PWD)
 CXX = g++
 MAKE = make
-CXXFLAGS = -I $(ROOT_DIR)/include/ -fPIC -std=c++20 -lunwind -lunwind-x86_64 -O3 -Wall
+CXXFLAGS = -g -I $(ROOT_DIR)/include/ -fPIC -std=c++20 -lunwind -lunwind-x86_64 -O3 -Wall
 DESTDIR = /
 TARGET = ipc_framework
 # 目录名不要加 /
@@ -25,7 +25,7 @@ export TARGET
 $(TARGET): lib$(TARGET).so
 
 lib$(TARGET).so: $(SUB_DIR_TAGET)
-	$(CXX) -shared $^ -o $@
+	$(CXX) -shared $(CXXFLAGS) $^ -o $@
 
 $(SUB_DIR_TAGET): $(SUB_DIR)
 
