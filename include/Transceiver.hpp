@@ -9,7 +9,7 @@
 #ifndef HEADER_TRANSCEIVER
 #define HEADER_TRANSCEIVER
 #include <string>
-#include <Message.hpp>
+#include "Message.hpp"
 
 namespace Transceiver
 {
@@ -27,6 +27,7 @@ class AbstractReceiver {
 	// 调用此函数开始接收，未接收到时会阻塞，返回接收到的字节数
 	// 传入缓冲区指针和缓冲区字节数
 	virtual long receive(char *buf, long size) = 0;
+	// 将接受到的信息放入一个信息类
 	virtual long receive(Message::AbstractMessage &);
 	// 返回接收器名
 	std::string getName() const;
