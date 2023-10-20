@@ -9,7 +9,7 @@ ROOT_DIR = $(PWD)
 CXX = g++
 MAKE = make
 CXXFLAGS = -I $(ROOT_DIR)/include/ -fPIC -std=c++20 -lunwind -lunwind-x86_64 -O3 -Wall
-
+DESTDIR = /
 TARGET = ipc_framework
 # 目录名不要加 /
 SUB_DIR = Message Transceiver UDS utils
@@ -34,6 +34,12 @@ $(SUB_DIR):
 
 test: $(TARGET)
 	$(MAKE) -C test
+
+install: $(TARGET)
+	mkdir -p $(DESTDIR)/usr/lib/x86_64-linux-gnu/
+	mkdir -p $(DESTDIR)/usr/include/IPC-framework/
+	cp libipc_framework.so $(DESTDIR)/usr/lib/x86_64-linux-gnu/
+	cp include/* $(DESTDIR)/usr/include/IPC-framework/
 
 clean:
 	- find -name *.o | xargs -I {} rm {}
