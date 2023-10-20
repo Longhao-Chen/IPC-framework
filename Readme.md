@@ -4,5 +4,15 @@
 
 目前已有的后端： UNIX域套接字(UDS)
 
-# 示例
-见 `test` 目录下
+# 安装
+```
+sudo make install
+```
+
+# 卸载
+```
+sudo make uninstall
+```
+
+# 示例和文档
+见 `doc` 目录下
