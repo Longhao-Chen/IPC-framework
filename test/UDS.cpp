@@ -47,7 +47,7 @@ TEST(UDS, UDSServerClient)
 	// 这里我们分成2个进程来测试通讯功能
 	if (fork() == 0) {
 		Transceiver::UDS::Client c("Testaaa");
-		char *a = msg.setBuf();
+		char *a = msg.returnMsgArea();
 		for (int i = 0; i < 16; ++i) {
 			a[i] = (char)i;
 		}
@@ -59,7 +59,7 @@ TEST(UDS, UDSServerClient)
 		s.receive(msg);
 		bool testres = true;
 		for (int i = 0; i < 16; ++i) {
-			if (msg.getBuf()[i] != (char)i)
+			if (msg.returnMsgArea()[i] != (char)i)
 				testres = false;
 		}
 		wait(0);
@@ -82,7 +82,7 @@ TEST(UDS, UDSTransceiver)
 			Transceiver::UDS::Transceiver t("Test1s", "Test0s");
 			Message::Message msg(16), msg1(16);
 			for (int i = 0; i < 16; ++i) {
-				msg.setBuf()[i] = (char)i;
+				msg.returnMsgArea()[i] = (char)i;
 			}
 			// 防止子进程的服务器未生成导致抛出错误
 			sleep(1);
@@ -90,7 +90,7 @@ TEST(UDS, UDSTransceiver)
 			t.receive(msg1);
 			bool testres = true;
 			for (int i = 0; i < 16; ++i) {
-				if (msg1.getBuf()[i] != (char)i)
+				if (msg1.returnMsgArea()[i] != (char)i)
 					testres = false;
 			}
 			EXPECT_TRUE(testres);

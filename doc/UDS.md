@@ -50,7 +50,7 @@ int main()
 								  "uTest0cs");
 			Message::Message msg(16), msg1(16);
 			for (int i = 0; i < 16; ++i) {
-				msg.setBuf()[i] = (char)i;
+				msg.returnMsgArea()[i] = (char)i;
 			}
 			// 防止子进程的服务器未生成导致抛出错误
 			sleep(1);
@@ -58,7 +58,7 @@ int main()
 			t->receive(msg1);
 			bool testres = true;
 			for (int i = 0; i < 16; ++i) {
-				if (msg1.getBuf()[i] != (char)i)
+				if (msg1.returnMsgArea()[i] != (char)i)
 					testres = false;
 			}
 			delete t;
