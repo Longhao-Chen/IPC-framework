@@ -97,3 +97,34 @@ TEST(Message, MessageDie)
 		SUCCEED();
 	}
 }
+
+TEST(Message, pMessage)
+{
+	int mi[10];
+	double md[10];
+	char mc[10];
+	Message::pMessage Mi(mi, 10);
+	Message::pMessage Md(md, 10);
+	Message::pMessage Mc(mc, 10);
+	bool intsuccess = true;
+	bool doublesuccess = true;
+	bool charsuccess = true;
+	for (int i = 0; i < 10; ++i) {
+		mi[i] = i;
+		md[i] = i;
+		mc[i] = i;
+		if (Mi.getMessage()[i] != i)
+			intsuccess = false;
+		if (Md.getMessage()[i] != i)
+			doublesuccess = false;
+		if (Mc.getMessage()[i] != i)
+			charsuccess = false;
+	}
+	EXPECT_TRUE(intsuccess);
+	EXPECT_TRUE(doublesuccess);
+	EXPECT_TRUE(charsuccess);
+
+	EXPECT_TRUE(abstractMessageTest(Mi, sizeof(int)*10));
+	EXPECT_TRUE(abstractMessageTest(Md, sizeof(double)*10));
+	EXPECT_TRUE(abstractMessageTest(Mc, 10));
+}
