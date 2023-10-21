@@ -51,6 +51,16 @@ class Message : public AbstractMessage {
 	// 如果对写入越界，不会进行检查
 	// 建议写入之后运行
 	char *returnMsgArea();
+
+	// 从用户指定的指针拷贝数据到数据区
+	// 均返回拷贝的大小，单位字节
+	// 拷贝的大小为信息的尺寸
+	long copy(const char *p);
+	// 指定拷贝的尺寸
+	// (指针， 要拷贝的数据大小， 拷贝到信息内部缓冲区的开始位置)
+	// 如果拷贝的尺寸大于信息的尺寸，则只拷贝信息的尺寸
+	long copy(const char *p, const long sizeCp, const long start = 0);
+
 	// 检查金丝雀值，如果不通过会抛出错误
 	void checkCanary();
 	~Message();

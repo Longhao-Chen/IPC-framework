@@ -11,40 +11,58 @@
 
 Message::Message::Message(long sizeIn)
 {
-    this->msg = new char[sizeIn + sizeof(long) + 1];
-    // 设置金丝雀值
-    this->msg[sizeIn + sizeof(long)] = (char)85;
-    this->timestamp = (long*)this->msg;
-    this->msgArea = this->msg + sizeof(long);
-    this->size = sizeIn + sizeof(long);
-    this->updateTimestamp();
+	this->msg = new char[sizeIn + sizeof(long) + 1];
+	// 设置金丝雀值
+	this->msg[sizeIn + sizeof(long)] = (char)85;
+	this->timestamp = (long *)this->msg;
+	this->msgArea = this->msg + sizeof(long);
+	this->size = sizeIn + sizeof(long);
+	this->updateTimestamp();
 }
 
 long Message::Message::updateTimestamp()
 {
-    struct timeval tv;
-    gettimeofday(&tv, 0);
-    *(this->timestamp) = tv.tv_sec * 1000000L + tv.tv_usec;
-    return *(this->timestamp);
+	struct timeval tv;
+	gettimeofday(&tv, 0);
+	*(this->timestamp) = tv.tv_sec * 1000000L + tv.tv_usec;
+	return *(this->timestamp);
 }
 
 long Message::Message::getTimestamp() const
 {
-    return *(this->timestamp);
+	return *(this->timestamp);
 }
 
 char *Message::Message::returnMsgArea()
 {
-    return this->msgArea;
+	return this->msgArea;
+}
+
+long Message::Message::copy(const char *p)
+{
+	long copySize = this->size - sizeof(long);
+	for (long i = 0; i < copySize; ++i){
+        this->returnMsgArea()[i] = p[i];
+    }
+    return copySize;
+}
+
+long Message::Message::copy(const char *p, const long sizeCp, const long start)
+{
+    long copySize = this->size - sizeof(long) - start;
+    for(long i = 0; i < ((sizeCp > copySize) ? copySize : sizeCp); ++i){
+        this->returnMsgArea()[i + start] = p[i];
+    }
+    return (sizeCp > copySize) ? copySize : sizeCp;
 }
 
 void Message::Message::checkCanary()
 {
-    if(this->msg[this->size] != (char)85)
-        throw ERROR("checkCanary Fail!");
+	if (this->msg[this->size] != (char)85)
+		throw ERROR("checkCanary Fail!");
 }
 
 Message::Message::~Message()
 {
-    delete this->msg;
+	delete this->msg;
 }

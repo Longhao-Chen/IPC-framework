@@ -81,6 +81,25 @@ TEST(Message, Message)
 			issuccess = false;
 	}
 	EXPECT_TRUE(issuccess);
+
+	char tmp[100];
+	EXPECT_EQ(a.copy(tmp), 10);
+	EXPECT_EQ(a.copy(tmp, 100), 10);
+	EXPECT_EQ(a.copy(tmp, 1000, 1), 9);
+	try{
+		a.checkCanary();
+		SUCCEED();
+	} catch (ERROR e){
+		std::cout << e;
+		FAIL();
+	}
+	for(int i=0; i<100; ++i)
+		tmp[i] = i;
+	a.copy(tmp);
+	for(int i=0; i<10; ++i){
+		if(a.returnMsgArea()[i] != i)
+			FAIL();
+	}
 }
 
 // 死亡测试
