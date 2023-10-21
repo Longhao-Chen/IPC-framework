@@ -9,6 +9,7 @@
 #include <gtest/gtest.h>
 #include <sys/time.h>
 #include <Message.hpp>
+#include <ERROR.hpp>
 
 /**
  * @description: 抽象信息接口测试
@@ -60,4 +61,39 @@ TEST(Message, MessageAbstractMessageTest)
 	c = new Message::Message(10);
 	EXPECT_TRUE(abstractMessageTest(*c, 10 + sizeof(long)));
 	delete c;
+}
+
+TEST(Message, Message)
+{
+	Message::Message a(10);
+	for (int i = 0; i < 10; ++i) {
+		a.returnMsgArea()[i] = i;
+	}
+	try {
+		a.checkCanary();
+	} catch (ERROR e) {
+		std::cout << e;
+		FAIL();
+	}
+	bool issuccess = true;
+	for (int i = 0; i < 10; ++i) {
+		if (a.returnMsgArea()[i] != i)
+			issuccess = false;
+	}
+	EXPECT_TRUE(issuccess);
+}
+
+// 死亡测试
+TEST(Message, MessageDie)
+{
+	Message::Message a(10);
+	for (int i = 0; i < 11; ++i) {
+		a.returnMsgArea()[i] = i;
+	}
+	try {
+		a.checkCanary();
+		FAIL();
+	} catch (ERROR e) {
+		SUCCEED();
+	}
 }
