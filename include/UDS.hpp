@@ -18,6 +18,7 @@ class Server : virtual public AbstractReceiver {
     private:
 	// 套接字fd
 	int sfd;
+	int cfd;
 
     public:
 	Server(std::string name);
