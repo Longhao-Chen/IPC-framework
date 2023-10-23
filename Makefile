@@ -5,10 +5,10 @@
 # @FilePath: /IPC-framework/Makefile
 # Copyright (c) 2023 by Longhao.Chen, All Rights Reserved. 
 #
-ROOT_DIR = $(PWD)
+ROOT_DIR = $(shell pwd)
 CXX = g++
 MAKE = make
-CXXFLAGS = -g -I $(ROOT_DIR)/include/ -fPIC -std=c++20 -lunwind -lunwind-x86_64 -O3 -Wall -Wextra
+CXXFLAGS = -g -I $(ROOT_DIR)/include/ -fPIC -std=c++20 -lunwind -lunwind-x86_64 -O3 -march=native -Wall -Wextra
 DESTDIR = /
 TARGET = ipc_framework
 # 目录名不要加 /
