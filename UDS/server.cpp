@@ -36,19 +36,20 @@ Server::Server(std::string name)
 
 long Server::receive(char *buf, long size)
 {
-	int cfd = accept(this->sfd, NULL, NULL);
-	if (cfd == -1)
+	long num = read(this->cfd, buf, size);
+	if(num == -1)
+		this->cfd = accept(this->sfd, NULL, NULL);
+	if (this->cfd == -1)
 		throw ERROR("accept ERROR");
-	long num = read(cfd, buf, size);
-	// 为了保证cfd在发生read错误的情况下被关闭
-	if (close(cfd))
-		throw ERROR("close cfd ERROR");
-	if (num == -1)
-		throw ERROR("read ERROR");
+	num = read(this->cfd, buf, size);
+	while (num < size) {
+		num += read(this->cfd, buf + num, size - num);
+	}
 	return num;
 }
 
 Server::~Server()
 {
+	close(this->cfd);
 	close(this->sfd);
 }

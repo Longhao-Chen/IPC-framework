@@ -27,17 +27,19 @@ Client::Client(std::string dest)
 
 long Client::send(const char *buf, long size)
 {
-    if(connect(this->sfd, (struct sockaddr*)&(this->addr), sizeof(struct sockaddr_un)) == -1)
-        throw ERROR("connect ERROR");
     long num = write(this->sfd, buf, size);
     if(num == -1)
-        throw ERROR("write ERROR: -1");
-    if(num != size)
-        throw ERROR("write ERROR: num!=size");
-    return num;
+        if (connect(this->sfd, (struct sockaddr *)&(this->addr),
+                sizeof(struct sockaddr_un)) == -1)
+            throw ERROR("connect ERROR");
+    num = write(this->sfd, buf, size);
+	while (num < size) {
+		num += write(this->sfd, buf + num, size - num);
+	}
+	return num;
 }
 
 Client::~Client()
 {
-    close(this->sfd);
+	close(this->sfd);
 }

@@ -10,6 +10,7 @@
 #include <string>
 #include <stdlib.h>
 #include <iostream>
+#include <chrono>
 
 #include <UDS.hpp>
 #include <Message.hpp>
@@ -97,6 +98,44 @@ TEST(UDS, UDSTransceiver)
 		}
 	} catch (ERROR e) {
 		std::cout << "PID = " << pid << std::endl;
+		std::cout << e;
+		FAIL();
+	}
+	if (pid == 0)
+		exit(0);
+	else
+		wait(0);
+}
+
+TEST(UDS, UDSTransceiverRepeat)
+{
+	int i = 1000; // 发送次数
+	long int size = 1280 * 1024 * 3 * sizeof(int);
+	pid_t pid = fork(); // 创建子进程
+	if (pid < 0) { // 创建失败
+		std::cout << "fork error" << std::endl;
+	}
+	try {
+		if (pid == 0) { // 子进程，作为客户端
+			sleep(1); // 等待父进程创建服务器
+
+			Transceiver::UDS::Client cli("test-server");
+			char *buf;
+
+			buf = (char *)malloc(size); // 模拟发送相机的图像
+			while (i--) {
+				cli.send(buf, size);
+			}
+		} else { // 父进程，作为服务器
+
+			Transceiver::UDS::Server srv("test-server");
+			char *buf;
+			buf = (char *)malloc(size); // 模拟接收相机的图像
+			while (i--) {
+				srv.receive(buf, size);
+			}
+		}
+	} catch (ERROR e) {
 		std::cout << e;
 		FAIL();
 	}
