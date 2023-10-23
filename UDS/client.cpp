@@ -27,12 +27,13 @@ Client::Client(std::string dest)
 
 long Client::send(const char *buf, long size)
 {
-    long num = write(this->sfd, buf, size);
-    if(num == -1)
-        if (connect(this->sfd, (struct sockaddr *)&(this->addr),
-                sizeof(struct sockaddr_un)) == -1)
-            throw ERROR("connect ERROR");
-    num = write(this->sfd, buf, size);
+	long num = write(this->sfd, buf, size);
+	if (num == -1) {
+		if (connect(this->sfd, (struct sockaddr *)&(this->addr),
+			    sizeof(struct sockaddr_un)) == -1)
+			throw ERROR("connect ERROR");
+		num = write(this->sfd, buf, size);
+	}
 	while (num < size) {
 		num += write(this->sfd, buf + num, size - num);
 	}
