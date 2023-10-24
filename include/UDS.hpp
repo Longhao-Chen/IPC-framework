@@ -24,7 +24,7 @@ class Server : virtual public AbstractReceiver {
 	Server(std::string name);
 	using AbstractReceiver::receive;
 	long receive(char *buf, long size) override;
-	~Server();
+	~Server() override;
 };
 
 class Client : virtual public AbstractTransmitter {
@@ -36,15 +36,7 @@ class Client : virtual public AbstractTransmitter {
 	Client(std::string dest);
 	using AbstractTransmitter::send;
 	long send(const char *buf, long size) override;
-	~Client();
-};
-
-class Transceiver : public AbstractTransceiver,
-				public Server,
-				public Client
-{
-    public:
-	Transceiver(std::string name, std::string dest);
+	~Client() override;
 };
 };
 #endif
