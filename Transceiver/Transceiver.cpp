@@ -9,12 +9,15 @@
 #include <Transceiver.hpp>
 #include <UDS.hpp>
 #include <Config.hpp>
+#include <ERROR.hpp>
 
 Transceiver::Receiver::Receiver(std::string name, Config::Config conf)
 	: AbstractReceiver(name)
 {
 	if(conf["BackEnd"] == "UDS")
 		this->BackEnd = new UDS::Server(name);
+	else
+		throw ERROR("conf[\"BackEnd\"] 无法识别的参数:" + conf["BackEnd"]);
 }
 
 long Transceiver::Receiver::receive(char *buf, long size)
@@ -32,6 +35,8 @@ Transceiver::Transmitter::Transmitter(std::string dest, Config::Config conf)
 {
 	if(conf["BackEnd"] == "UDS")
 		this->BackEnd = new UDS::Client(dest);
+	else
+		throw ERROR("conf[\"BackEnd\"] 无法识别的参数:" + conf["BackEnd"]);
 }
 
 long Transceiver::Transmitter::send(const char *buf, long size)
