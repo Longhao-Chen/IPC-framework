@@ -17,7 +17,7 @@ namespace Transceiver::UDS
 class Server : virtual public AbstractReceiver {
     private:
 	// 套接字fd
-	int sfd;
+	int sfd = -1;
 	// -1 表示未进行连接
 	int cfd = -1;
 
@@ -30,7 +30,7 @@ class Server : virtual public AbstractReceiver {
 
 class Client : virtual public AbstractTransmitter {
     private:
-	int sfd;
+	int sfd = -1;
 	struct sockaddr_un addr;
 
     public:
