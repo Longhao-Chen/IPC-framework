@@ -56,7 +56,7 @@ TEST(UDS, UDSServerClient)
 		for (int i = 0; i < 16; ++i) {
 			a[i] = (char)i;
 		}
-		sleep(1);
+		usleep(10000);
 		c.send(msg);
 		exit(0);
 	} else {
@@ -92,7 +92,7 @@ TEST(UDS, UDSTransceiver)
 				msg.returnMsgArea()[i] = (char)i;
 			}
 			// 防止子进程的服务器未生成导致抛出错误
-			sleep(1);
+			usleep(10000);
 			t.send(msg);
 			t.receive(msg1);
 			bool testres = true;
@@ -125,8 +125,6 @@ TEST(UDS, UDSTransceiverRepeat)
 	}
 	try {
 		if (pid == 0) { // 子进程，作为客户端
-			sleep(1); // 等待父进程创建服务器
-
 			Transceiver::Transmitter cli("test-server", conf);
 			char *buf;
 
