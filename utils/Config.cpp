@@ -55,7 +55,7 @@ std::istream &Config::operator>>(std::istream &in, Config &conf)
 
 std::ostream &Config::operator<<(std::ostream &out, const Config &conf)
 {
-	for (auto it = ConfigOption.begin(); it == ConfigOption.end(); ++it) {
+	for (auto it = ConfigOption.begin(); it != ConfigOption.end(); ++it) {
 		out << *it << " ";
 		out << conf[*it] << std::endl;
 	}
