@@ -1,4 +1,5 @@
 # UNIX 域套接字部分
+**不推荐直接使用这些接口，建议使用 通用收发器**
 ## Transceiver::UDS::Server
 ### 接口
 虚继承 `Transceiver::AbstractReceiver`
@@ -13,41 +14,37 @@
 
 **注意：在调用`send`之前，必须保证目标地址存在**
 
-## Transceiver::UDS::Transceiver
-### 接口
-继承`Transceiver::AbstractTransceiver`
-
-### 构造
-传入`(std::string name, std::string dest)`，`name` 为监听的地址，`dest` 为目标
-
-## 一个简短的示例
+## 一个在通用收发器中使用 `UDS` 的简短示例
 ```cpp
 #include <string>
 #include <stdlib.h>
 #include <iostream>
 #include <unistd.h>
 
-#include <IPC-framework/UDS.hpp>
+#include <IPC-framework/Transceiver.hpp>
 #include <IPC-framework/Message.hpp>
 #include <IPC-framework/ERROR.hpp>
+#include <IPC-framework/Config.hpp>
 
 int main()
 {
 	int pid = fork();
+	Config::Config conf;
+	conf.set("BackEnd", "UDS");
 	try {
 		// 仍然是2个进程通讯
 		if (pid == 0) {
-			Transceiver::UDS::Transceiver *t =
-				new Transceiver::UDS::Transceiver("uTest0cs",
-								  "uTest1cs");
+			Transceiver::Transceiver *t =
+				new Transceiver::Transceiver("uTest0cs",
+							     "uTest1cs", conf);
 			Message::Message msg(16);
 			t->receive(msg);
 			t->send(msg);
 			delete t;
 		} else {
-			Transceiver::UDS::Transceiver *t =
-				new Transceiver::UDS::Transceiver("uTest1cs",
-								  "uTest0cs");
+			Transceiver::Transceiver *t =
+				new Transceiver::Transceiver("uTest1cs",
+							     "uTest0cs", conf);
 			Message::Message msg(16), msg1(16);
 			for (int i = 0; i < 16; ++i) {
 				msg.returnMsgArea()[i] = (char)i;
@@ -62,7 +59,7 @@ int main()
 					testres = false;
 			}
 			delete t;
-			if(testres){
+			if (testres) {
 				std::cout << "通信成功" << std::endl;
 			}
 		}
@@ -75,5 +72,5 @@ int main()
 
 编译命令：
 ```
-g++ test.cpp -lipc_framework -lunwind -lunwind-x86_64
+g++ test.cpp -lipc_framework -lunwind -lunwind-x86_64 -O3
 ```
