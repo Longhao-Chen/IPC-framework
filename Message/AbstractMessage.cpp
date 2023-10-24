@@ -9,12 +9,12 @@
 
 const char *Message::AbstractMessage::getBuf() const
 {
-    return this->msg;
+	return this->msg;
 }
 
 char *Message::AbstractMessage::setBuf()
 {
-    return this->msg;
+	return this->msg;
 }
 
 long Message::AbstractMessage::getSize() const
