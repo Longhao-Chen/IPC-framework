@@ -20,7 +20,7 @@ export MAKE
 export CXXFLAGS
 export TARGET
 
-.PHONY: $(TARGET) $(SUB_DIR) test clean clean-all
+.PHONY: $(TARGET) $(SUB_DIR) test clean clean-all install uninstall
 
 $(TARGET): lib$(TARGET).so
 
@@ -35,7 +35,7 @@ $(SUB_DIR):
 test: $(TARGET)
 	$(MAKE) -C test
 
-install: $(TARGET)
+install: $(TARGET) uninstall
 	mkdir -p $(DESTDIR)/usr/lib/x86_64-linux-gnu/
 	mkdir -p $(DESTDIR)/usr/include/IPC-framework/
 	cp libipc_framework.so $(DESTDIR)/usr/lib/x86_64-linux-gnu/
