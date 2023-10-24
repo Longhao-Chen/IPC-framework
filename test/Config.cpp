@@ -16,6 +16,7 @@ TEST(Config, save)
 {
 	try {
 		Config::Config conf;
+		conf.set("BackEnd", "UDS");
 		std::ofstream fs("/tmp/Config_test_fdasfasf");
 		if (fs.is_open()) {
 			conf.save(fs);
@@ -38,7 +39,7 @@ TEST(Config, load)
 		else {
 			Config::Config conf(fs);
 			fs.close();
-            SUCCEED();
+			SUCCEED();
 		}
 
 		fs.open("/tmp/Config_test_fdasfasf");
@@ -48,7 +49,27 @@ TEST(Config, load)
 			Config::Config conf1;
 			fs >> conf1;
 			fs.close();
-            SUCCEED();
+			SUCCEED();
+		}
+	} catch (ERROR e) {
+		std::cout << e << std::endl;
+		FAIL();
+	}
+}
+
+TEST(Config, read)
+{
+	try {
+		std::ifstream fs("/tmp/Config_test_fdasfasf");
+		if (!fs.is_open())
+			FAIL();
+		else {
+			Config::Config conf(fs);
+			fs.close();
+			if (conf["BackEnd"] == "UDS")
+				SUCCEED();
+			else
+				FAIL();
 		}
 	} catch (ERROR e) {
 		std::cout << e << std::endl;
