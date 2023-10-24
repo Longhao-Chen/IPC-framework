@@ -27,6 +27,10 @@ std::string AbstractReceiver::getName() const
 	return this->name;
 }
 
+AbstractReceiver::~AbstractReceiver()
+{
+}
+
 AbstractTransmitter::AbstractTransmitter()
 {
 }
@@ -46,9 +50,17 @@ std::string AbstractTransmitter::getDest() const
 	return this->dest;
 }
 
+AbstractTransmitter::~AbstractTransmitter()
+{
+}
+
 Transceiver::AbstractTransceiver::AbstractTransceiver(std::string name,
 						      std::string dest)
 	: AbstractReceiver(name)
 	, AbstractTransmitter(dest)
+{
+}
+
+AbstractTransceiver::~AbstractTransceiver()
 {
 }

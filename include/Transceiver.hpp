@@ -10,6 +10,7 @@
 #define HEADER_TRANSCEIVER
 #include <string>
 #include "Message.hpp"
+#include "Config.hpp"
 
 namespace Transceiver
 {
@@ -31,6 +32,7 @@ class AbstractReceiver {
 	virtual long receive(Message::AbstractMessage &);
 	// 返回接收器名
 	std::string getName() const;
+	virtual ~AbstractReceiver();
 };
 
 // 只能发送信息，发送信息是可靠的
@@ -49,6 +51,7 @@ class AbstractTransmitter {
 	virtual long send(const Message::AbstractMessage &);
 	// 返回目标接收器名
 	std::string getDest() const;
+	virtual ~AbstractTransmitter();
 };
 
 // 可以全双工的收发信息，收发信息是可靠的
@@ -56,6 +59,37 @@ class AbstractTransceiver : virtual public AbstractReceiver,
 			    virtual public AbstractTransmitter {
     public:
 	AbstractTransceiver(std::string name, std::string dest);
+	virtual ~AbstractTransceiver();
+};
+
+// 通用接收器，可以通过 Config 选择不同的后端
+class Receiver : virtual public AbstractReceiver {
+	private:
+		AbstractReceiver *BackEnd;
+    public:
+	Receiver(std::string name, Config::Config conf);
+	using AbstractReceiver::receive;
+	long receive(char *buf, long size) override;
+	~Receiver();
+};
+
+// 通用发送器，可以通过 Config 选择不同的后端
+class Transmitter : virtual public AbstractTransmitter {
+	private:
+		AbstractTransmitter *BackEnd;
+    public:
+	Transmitter(std::string dest, Config::Config conf);
+	using AbstractTransmitter::send;
+	long send(const char *buf, long size) override;
+	~Transmitter();
+};
+
+// 通用收发器，可以通过 Config 选择不同的后端
+class Transceiver : virtual AbstractTransceiver,
+		    public Receiver,
+		    public Transmitter {
+    public:
+	Transceiver(std::string name, std::string dest, Config::Config conf);
 };
 };
 #endif

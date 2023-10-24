@@ -12,9 +12,11 @@
 #include <iostream>
 #include <chrono>
 
-#include <UDS.hpp>
+#include <Transceiver.hpp>
+#include <Config.hpp>
 #include <Message.hpp>
 #include <ERROR.hpp>
+#include <UDS.hpp>
 
 // 测试 UDS 中的 Server 类的创建
 TEST(UDS, UDSServerCreate)
@@ -44,10 +46,12 @@ TEST(UDS, UDSClientCreate)
 
 TEST(UDS, UDSServerClient)
 {
+	Config::Config conf;
+	conf.set("BackEnd", "UDS");
 	Message::Message msg(16);
 	// 这里我们分成2个进程来测试通讯功能
 	if (fork() == 0) {
-		Transceiver::UDS::Client c("Testaaa");
+		Transceiver::Transmitter c("Testaaa", conf);
 		char *a = msg.returnMsgArea();
 		for (int i = 0; i < 16; ++i) {
 			a[i] = (char)i;
@@ -56,7 +60,7 @@ TEST(UDS, UDSServerClient)
 		c.send(msg);
 		exit(0);
 	} else {
-		Transceiver::UDS::Server s("Testaaa");
+		Transceiver::Receiver s("Testaaa", conf);
 		s.receive(msg);
 		bool testres = true;
 		for (int i = 0; i < 16; ++i) {
@@ -70,17 +74,19 @@ TEST(UDS, UDSServerClient)
 
 TEST(UDS, UDSTransceiver)
 {
+	Config::Config conf;
+	conf.set("BackEnd", "UDS");
 	int pid = fork();
 	try {
 		// 仍然是2个进程通讯
 		if (pid == 0) {
-			Transceiver::UDS::Transceiver t("Test0s", "Test1s");
+			Transceiver::Transceiver t("Test0s", "Test1s", conf);
 			Message::Message msg(16);
 			t.receive(msg);
 			t.send(msg);
 			SUCCEED();
 		} else {
-			Transceiver::UDS::Transceiver t("Test1s", "Test0s");
+			Transceiver::Transceiver t("Test1s", "Test0s", conf);
 			Message::Message msg(16), msg1(16);
 			for (int i = 0; i < 16; ++i) {
 				msg.returnMsgArea()[i] = (char)i;
@@ -109,6 +115,8 @@ TEST(UDS, UDSTransceiver)
 
 TEST(UDS, UDSTransceiverRepeat)
 {
+	Config::Config conf;
+	conf.set("BackEnd", "UDS");
 	int i = 1000; // 发送次数
 	long int size = 1280 * 1024 * 3 * sizeof(int);
 	pid_t pid = fork(); // 创建子进程
@@ -119,7 +127,7 @@ TEST(UDS, UDSTransceiverRepeat)
 		if (pid == 0) { // 子进程，作为客户端
 			sleep(1); // 等待父进程创建服务器
 
-			Transceiver::UDS::Client cli("test-server");
+			Transceiver::Transmitter cli("test-server", conf);
 			char *buf;
 
 			buf = (char *)malloc(size); // 模拟发送相机的图像
@@ -128,7 +136,7 @@ TEST(UDS, UDSTransceiverRepeat)
 			}
 		} else { // 父进程，作为服务器
 
-			Transceiver::UDS::Server srv("test-server");
+			Transceiver::Receiver srv("test-server", conf);
 			char *buf;
 			buf = (char *)malloc(size); // 模拟接收相机的图像
 			while (i--) {
