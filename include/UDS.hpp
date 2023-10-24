@@ -18,7 +18,8 @@ class Server : virtual public AbstractReceiver {
     private:
 	// 套接字fd
 	int sfd;
-	int cfd;
+	// -1 表示未进行连接
+	int cfd = -1;
 
     public:
 	Server(std::string name);

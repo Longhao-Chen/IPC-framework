@@ -36,13 +36,12 @@ Server::Server(std::string name)
 
 long Server::receive(char *buf, long size)
 {
-	long num = read(this->cfd, buf, size);
-	if (num == -1) {
+	if (this->cfd == -1) {
 		this->cfd = accept(this->sfd, NULL, NULL);
 		if (this->cfd == -1)
 			throw ERROR("accept ERROR");
-		num = read(this->cfd, buf, size);
 	}
+	long num = read(this->cfd, buf, size);
 	while (num < size) {
 		num += read(this->cfd, buf + num, size - num);
 	}
