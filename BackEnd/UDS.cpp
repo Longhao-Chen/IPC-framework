@@ -1,9 +1,9 @@
 /*
  * @Author: Longhao.Chen <Longhao.Chen@outlook.com>
- * @Date: 2023-09-19 19:58:42
+ * @Date: 2023-10-24 18:58:31
  * @LastEditors: Longhao.Chen <Longhao.Chen@outlook.com>
- * @FilePath: /IPC-framework/UDS/server.cpp
- * @Description: 
+ * @FilePath: /IPC-framework/BackEnd/UDS.cpp
+ * @Description: UNIX 域套接字
  * Copyright (c) 2023 by Longhao.Chen, All Rights Reserved. 
  */
 #include <sys/socket.h>
@@ -13,6 +13,9 @@
 #include <UDS.hpp>
 using namespace Transceiver::UDS;
 
+/*
+* 接收器的实现
+*/
 Server::Server(std::string name)
 	: AbstractReceiver(name)
 {
@@ -51,5 +54,40 @@ long Server::receive(char *buf, long size)
 Server::~Server()
 {
 	close(this->cfd);
+	close(this->sfd);
+}
+
+/*
+* 发送器的实现
+*/
+Client::Client(std::string dest)
+	: AbstractTransmitter(dest)
+{
+	this->sfd = socket(AF_UNIX, SOCK_STREAM, 0);
+	if (this->sfd == -1)
+		throw ERROR("Create socket ERROR");
+	memset(&(this->addr), 0, sizeof(struct sockaddr_un));
+	this->addr.sun_family = AF_UNIX;
+	strncpy(this->addr.sun_path + 1, dest.c_str(),
+		sizeof(struct sockaddr_un) - 1 - sizeof(AF_UNIX));
+}
+
+long Client::send(const char *buf, long size)
+{
+	long num = write(this->sfd, buf, size);
+	if (num == -1) {
+		if (connect(this->sfd, (struct sockaddr *)&(this->addr),
+			    sizeof(struct sockaddr_un)) == -1)
+			throw ERROR("connect ERROR");
+		num = write(this->sfd, buf, size);
+	}
+	while (num < size) {
+		num += write(this->sfd, buf + num, size - num);
+	}
+	return num;
+}
+
+Client::~Client()
+{
 	close(this->sfd);
 }

@@ -2,10 +2,10 @@
 # @Author: Longhao.Chen <Longhao.Chen@outlook.com>
 # @Date: 2023-09-22 00:35:15
 # @LastEditors: Longhao.Chen <Longhao.Chen@outlook.com>
-# @FilePath: /IPC-framework/UDS/Makefile
+# @FilePath: /IPC-framework/BackEnd/Makefile
 # Copyright (c) 2023 by Longhao.Chen, All Rights Reserved. 
 #
-DIRNAME = UDS
+DIRNAME = BackEnd
 
 .PHONY: all
 

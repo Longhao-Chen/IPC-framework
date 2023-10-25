@@ -12,7 +12,7 @@ CXXFLAGS = -g -I $(ROOT_DIR)/include/ -fPIC -std=c++20 -lunwind -lunwind-x86_64 
 DESTDIR = /
 TARGET = ipc_framework
 # 目录名不要加 /
-SUB_DIR = Message Transceiver UDS utils
+SUB_DIR = Message Transceiver BackEnd utils
 SUB_DIR_TAGET = $(addsuffix .out, $(join $(addsuffix /, $(SUB_DIR)), $(SUB_DIR)))
 
 export CXX
