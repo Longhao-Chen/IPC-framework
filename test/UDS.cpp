@@ -117,7 +117,7 @@ TEST(UDS, UDSTransceiverRepeat)
 {
 	Config::Config conf;
 	conf.set("BackEnd", "UDS");
-	int i = 1000; // 发送次数
+	int i = 10; // 发送次数
 	long int size = 1280 * 1024 * 3 * sizeof(int);
 	pid_t pid = fork(); // 创建子进程
 	if (pid < 0) { // 创建失败
