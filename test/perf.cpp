@@ -58,7 +58,7 @@ TEST(Pref, UDSBigData)
 {
 	Config::Config conf;
 	conf.set("BackEnd", "UDS");
-	long int size = 1280 * 1024 * 3 * sizeof(int);
+	long int size = 1280 * 1024 * 3 * sizeof(char);
 	long int N = 1000;
 	EXPECT_TRUE(testPref(size, conf, N));
 }
@@ -67,7 +67,7 @@ TEST(Pref, UDSSmallData)
 {
 	Config::Config conf;
 	conf.set("BackEnd", "UDS");
-	long int size = 10 * sizeof(int);
+	long int size = 1;
 	long int N = 500000;
 	EXPECT_TRUE(testPref(size, conf, N));
 }
