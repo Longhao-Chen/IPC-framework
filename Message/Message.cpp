@@ -8,6 +8,7 @@
 #include <Message.hpp>
 #include <sys/time.h>
 #include <ERROR.hpp>
+#include <string.h>
 
 Message::Message::Message(long sizeIn)
 {
@@ -41,18 +42,14 @@ char *Message::Message::returnMsgArea()
 long Message::Message::copy(const char *p)
 {
 	long copySize = this->size - sizeof(long);
-	for (long i = 0; i < copySize; ++i){
-        this->returnMsgArea()[i] = p[i];
-    }
+	memcpy(this->returnMsgArea(), p, copySize);
     return copySize;
 }
 
 long Message::Message::copy(const char *p, const long sizeCp, const long start)
 {
     long copySize = this->size - sizeof(long) - start;
-    for(long i = 0; i < ((sizeCp > copySize) ? copySize : sizeCp); ++i){
-        this->returnMsgArea()[i + start] = p[i];
-    }
+	memcpy(this->returnMsgArea() + start, p, (sizeCp > copySize) ? copySize : sizeCp);
     return (sizeCp > copySize) ? copySize : sizeCp;
 }
 
