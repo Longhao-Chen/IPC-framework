@@ -5,7 +5,7 @@
 # @FilePath: /IPC-framework/test/Makefile
 # Copyright (c) 2023 by Longhao.Chen, All Rights Reserved. 
 # 
-CXXFLAGS = -O3 -I../include -L.. -lgtest -lgtest_main -l$(TARGET) -pthread -lunwind -lunwind-x86_64
+CXXFLAGS = -flto=auto -O3 -Wall -I../include -L.. -lgtest -lgtest_main -l$(TARGET) -pthread -lunwind -lunwind-x86_64
 
 .PHONY: test test-shared
 

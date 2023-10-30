@@ -8,7 +8,7 @@
 ROOT_DIR = $(shell pwd)
 CXX = g++
 MAKE = make
-CXXFLAGS = -g -I $(ROOT_DIR)/include/ -fPIC -std=c++20 -lunwind -lunwind-x86_64 -O3 -march=native -Wall -Wextra
+CXXFLAGS = -flto=auto -g -I $(ROOT_DIR)/include/ -fPIC -std=c++20 -lunwind -lunwind-x86_64 -O3 -march=native -Wall -Wextra
 DESTDIR = /
 TARGET = ipc_framework
 # 目录名不要加 /
