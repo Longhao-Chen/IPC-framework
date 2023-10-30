@@ -21,3 +21,7 @@ long Message::AbstractMessage::getSize() const
 {
 	return this->size;
 }
+
+Message::AbstractMessage::~AbstractMessage()
+{
+}

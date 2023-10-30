@@ -25,6 +25,7 @@ class AbstractMessage {
 	virtual char *setBuf();
 	// 返回信息段大小
 	virtual long getSize() const;
+	virtual ~AbstractMessage();
 };
 
 /*
