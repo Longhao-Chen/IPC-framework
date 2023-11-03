@@ -39,7 +39,7 @@ install: $(TARGET) uninstall
 	mkdir -p $(DESTDIR)/usr/lib/x86_64-linux-gnu/
 	mkdir -p $(DESTDIR)/usr/include/IPC-framework/
 	cp libipc_framework.so $(DESTDIR)/usr/lib/x86_64-linux-gnu/
-	cp include/* $(DESTDIR)/usr/include/IPC-framework/
+	cp include/*.hpp $(DESTDIR)/usr/include/IPC-framework/
 
 uninstall:
 	- rm -r $(DESTDIR)/usr/include/IPC-framework
@@ -51,4 +51,4 @@ clean:
 	- find -name *.d | xargs -I {} rm {}
 
 clean-all: clean
-	-rm lib$(TARGET).so
+	- rm lib$(TARGET).so
