@@ -13,7 +13,7 @@
 Config::Config::Config()
 {
 	// 默认配置
-	this->BackEnd = "UDS";
+	this->BackEnd = "SHM";
 	this->OnlyUser = "True";
 	// 512KiB
 	this->BufferSize = "524288";
