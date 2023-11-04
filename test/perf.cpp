@@ -71,3 +71,21 @@ TEST(Pref, UDSSmallData)
 	long int N = 500000;
 	EXPECT_TRUE(testPref(size, conf, N));
 }
+
+TEST(Perf, SHMBigData)
+{
+	Config::Config conf;
+	conf.set("BackEnd", "SHM");
+	long int size = 1280 * 1024 * 3 * sizeof(char);
+	long int N = 5000;
+	EXPECT_TRUE(testPref(size, conf, N));
+}
+
+TEST(Perf, SHMSmallData)
+{
+	Config::Config conf;
+	conf.set("BackEnd", "SHM");
+	long int size = 1;
+	long int N = 10000000;
+	EXPECT_TRUE(testPref(size, conf, N));
+}

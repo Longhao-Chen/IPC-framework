@@ -12,11 +12,18 @@
 #include <vector>
 namespace Config
 {
-const std::vector<std::string> ConfigOption = { "BackEnd" };
+const std::vector<std::string> ConfigOption = { "BackEnd", "OnlyUser",
+						"BufferSize" };
 
 class Config {
     private:
 	std::string BackEnd;
+	// 如果为True则只能在同一个用户下通信
+	// 为False则可以在系统全局范围内通信
+	// 对USD后端无效
+	std::string OnlyUser;
+	// 缓冲区大小，单位为字节
+	std::string BufferSize;
 
     public:
 	// 生成默认配置

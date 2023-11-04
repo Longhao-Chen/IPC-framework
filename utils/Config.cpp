@@ -14,6 +14,9 @@ Config::Config::Config()
 {
 	// 默认配置
 	this->BackEnd = "UDS";
+	this->OnlyUser = "True";
+	// 512KiB
+	this->BufferSize = "524288";
 }
 
 Config::Config::Config(std::istream &ins)
@@ -31,6 +34,10 @@ std::string Config::Config::operator[](const std::string co) const
 {
 	if (co == "BackEnd")
 		return this->BackEnd;
+	else if (co == "OnlyUser")
+		return this->OnlyUser;
+	else if (co == "BufferSize")
+		return this->BufferSize;
 	else
 		throw ERROR("参数错误");
 }
@@ -39,6 +46,10 @@ void Config::Config::set(const std::string type, const std::string value)
 {
 	if (type == "BackEnd")
 		this->BackEnd = value;
+	else if (type == "OnlyUser")
+		this->OnlyUser = value;
+	else if (type == "BufferSize")
+		this->BufferSize = value;
 	else
 		throw ERROR("参数错误");
 }
@@ -59,5 +70,5 @@ std::ostream &Config::operator<<(std::ostream &out, const Config &conf)
 		out << *it << " ";
 		out << conf[*it] << std::endl;
 	}
-    return out;
+	return out;
 }
