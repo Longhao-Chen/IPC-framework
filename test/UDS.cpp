@@ -3,7 +3,7 @@
  * @Date: 2023-10-13 22:05:39
  * @LastEditors: Longhao.Chen <Longhao.Chen@outlook.com>
  * @FilePath: /IPC-framework/test/UDS.cpp
- * @Description: 测试 UDS 目录下的文件
+ * @Description: 测试 UDS 后端的功能
  * Copyright (c) 2023 by Longhao.Chen, All Rights Reserved. 
  */
 #include <gtest/gtest.h>
@@ -129,6 +129,8 @@ TEST(UDS, UDSTransceiverRepeat)
 			char *buf;
 
 			buf = (char *)malloc(size); // 模拟发送相机的图像
+			for (long i = 0; i < size; ++i)
+				buf[i] = (char)i;
 			while (i--) {
 				cli.send(buf, size);
 			}
@@ -140,6 +142,9 @@ TEST(UDS, UDSTransceiverRepeat)
 			while (i--) {
 				srv.receive(buf, size);
 			}
+			for (long i = 0; i < size; ++i)
+				if (buf[i] != (char)i)
+					FAIL();
 		}
 	} catch (ERROR e) {
 		std::cout << e;
