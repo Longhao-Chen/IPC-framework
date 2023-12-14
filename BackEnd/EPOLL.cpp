@@ -1,6 +1,6 @@
 /*
  * @Author: null-qwerty <null-qwerty@outlook.com>
- * @Date: 2023-12-14 05:04:22
+ * @Date: 2023-12-14 17:54:38
  * @LastEditors: null-qwerty <null-qwerty@outlook.com>
  * @FilePath: /IPC-framework/BackEnd/EPOLL.cpp
  * @Description: UNIX 域套接字加入epoll实现多对一发送
@@ -72,6 +72,7 @@ long Server::receive(char *buf, long size)
 				if (epoll_ctl(epfd, EPOLL_CTL_DEL, events[i].data.fd, NULL) == -1)
 					throw ERROR("epoll_ctl: cfd");
 				close(events[i].data.fd);
+				events[i].data.fd = this->sfd;
 				std::cout << "Client exit" << std::endl;
 			}
 		}
