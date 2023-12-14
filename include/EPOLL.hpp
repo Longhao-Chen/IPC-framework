@@ -1,9 +1,9 @@
 /*
  * @Author: null-qwerty <null-qwerty@outlook.com>
- * @Date: 2023-12-14 05:04:22
+ * @Date: 2023-12-14 17:54:38
  * @LastEditors: null-qwerty <null-qwerty@outlook.com>
  * @FilePath: /IPC-framework/include/EPOLL.hpp
- * @Description: UNIX域套接字加入rpoll的收发器实现
+ * @Description: UNIX域套接字加入epoll的收发器实现
  * Copyright (c) 2023 by null-qwerty, All Rights Reserved. 
  */
 #ifndef HEADER_EPOLL
@@ -13,7 +13,7 @@
 #include <sys/un.h>
 #include <sys/epoll.h>
 
-#define MAX_EVENTS 10
+#define MAX_EVENTS 16
 
 namespace Transceiver::EPOLL
 {
