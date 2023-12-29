@@ -12,8 +12,6 @@
 #include <unistd.h>
 #include <sys/shm.h>
 
-#define SYSV_SHM_MAXSIZE 100 * 1024 * 1024
-
 namespace Transceiver::SYSV
 {
 class Receiver : virtual public AbstractReceiver {
