@@ -1,7 +1,7 @@
 /*
  * @Author: Longhao.Chen <Longhao.Chen@outlook.com>
- * @Date: 2023-10-27 15:11:49
- * @LastEditors: Longhao.Chen <Longhao.Chen@outlook.com>
+ * @Date: 2023-12-30 01:48:05
+ * @LastEditors: Haoyu Chen <null-qwerty@outlook.com>
  * @FilePath: /IPC-framework/test/perf.cpp
  * @Description: 性能测试程序
  * Copyright (c) 2023 by Longhao.Chen, All Rights Reserved. 
@@ -86,6 +86,26 @@ TEST(Perf, SHMSmallData)
 	Config::Config conf;
 	conf.set("BackEnd", "SHM");
 	long int size = 1;
+	long int N = 10000000;
+	EXPECT_TRUE(testPref(size, conf, N));
+}
+
+TEST(Perf, SHM_SYSVBigData)
+{
+	Config::Config conf;
+	conf.set("BackEnd", "SHM_SYSV");
+	long int size = 1280 * 1024 * 3 * sizeof(char);
+	conf.set("BufferSize", std::to_string(size));
+	long int N = 5000;
+	EXPECT_TRUE(testPref(size, conf, N));
+}
+
+TEST(Perf, SYSV_SHMSmallData)
+{
+	Config::Config conf;
+	conf.set("BackEnd", "SHM_SYSV");
+	long int size = 1;
+	conf.set("BufferSize", std::to_string(size));
 	long int N = 10000000;
 	EXPECT_TRUE(testPref(size, conf, N));
 }
