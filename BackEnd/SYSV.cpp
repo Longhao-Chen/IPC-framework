@@ -14,16 +14,17 @@
 #include <utils/StringToNum.hpp>
 #include <sys/stat.h> 
 #include <sys/types.h>
+#include <sys/mman.h>
+#include <fcntl.h>
 
 Transceiver::SYSV::Receiver::Receiver(std::string name,
                                       const Config::Config &conf)
     : AbstractReceiver(name) {
-        std::string path = "/tmp/IPC-framework/SHM/" + name;
-        mkdir("/tmp/IPC-framework", 0777);
-        mkdir("/tmp/IPC-framework/SHM", 0777);
-        if(mkdir(path.c_str(), 0777) == -1 && errno != EEXIST)
-            throw ERROR(std::string("Receiver: mkdir ERROR, name = ") + name);
-        key_t key = ftok(path.c_str(), 0);
+        auto mode = S_IRUSR | S_IWUSR | S_IXUSR;
+    	if (conf["OnlyUser"] == "False")
+		mode |= S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH |
+			S_IXOTH;
+	    this->key = shm_open(name.c_str(), O_RDWR | O_CREAT | O_TRUNC, mode);
         if (key == -1)
             throw ERROR(std::string("Receiver: ftok ERROR, name = ") + name);
         
@@ -46,18 +47,17 @@ long Transceiver::SYSV::Receiver::receive(char *buf, long size) {
 
 Transceiver::SYSV::Receiver::~Receiver() {
     shmdt(this->shmaddr);
+    shm_unlink(this->getName().c_str());
 }
 
 Transceiver::SYSV::Transmitter::Transmitter(std::string dest,
                                             const Config::Config &conf)
     : AbstractTransmitter(dest) {
-        std::string path = "/tmp/IPC-framework/SHM/" + dest;
-        mkdir("/tmp/IPC-framework", 0777);
-        mkdir("/tmp/IPC-framework/SHM", 0777);
-        if(mkdir(path.c_str(), 0777) == -1 && errno != EEXIST)
-            throw ERROR(std::string("Transmitter: mkdir ERROR, dest = ") +
-                        dest);
-        key_t key = ftok(path.c_str(), 0);
+        auto mode = S_IRUSR | S_IWUSR | S_IXUSR;
+    	if (conf["OnlyUser"] == "False")
+		mode |= S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH |
+			S_IXOTH;
+	    this->key = shm_open(dest.c_str(), O_RDWR | O_CREAT | O_TRUNC, mode);
         if (key == -1)
             throw ERROR(std::string("Transmitter: ftok ERROR, dest = ") +
                         dest);
@@ -83,4 +83,5 @@ long Transceiver::SYSV::Transmitter::send(const char *buf, long size) {
 
 Transceiver::SYSV::Transmitter::~Transmitter() {
     shmdt(this->shmaddr);
+    shm_unlink(this->getDest().c_str());
 }
