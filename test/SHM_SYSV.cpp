@@ -24,7 +24,7 @@ TEST(SHM_SYSV, SHM_SYSVReceiverTransmitter)
 	conf.set("BackEnd", "SHM_SYSV");
 	int i = 10; // 发送次数
 	long int size = 1280 * 1024 * 3 * sizeof(int);
-    conf.set("BufferSize", std::to_string(size));
+	conf.set("BufferSize", std::to_string(size));
 	pid_t pid = fork(); // 创建子进程
 	if (pid < 0) { // 创建失败
 		std::cout << "fork error" << std::endl;

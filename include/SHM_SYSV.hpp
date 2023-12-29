@@ -15,27 +15,27 @@
 namespace Transceiver::SHM_SYSV
 {
 class Receiver : virtual public AbstractReceiver {
-	private:
-		key_t key;
-		int shmid;
-		void *shmaddr;
-		long BufferSize;
+    private:
+	key_t key;
+	int shmid;
+	void *shmaddr;
+	long BufferSize;
 
-	public:
-		Receiver(std::string name, const Config::Config &conf);
-		using AbstractReceiver::receive;
-		long receive(char *buf, long size) override;
-		~Receiver() override;
+    public:
+	Receiver(std::string name, const Config::Config &conf);
+	using AbstractReceiver::receive;
+	long receive(char *buf, long size) override;
+	~Receiver() override;
 };
 
 class Transmitter : virtual public AbstractTransmitter {
-    private:
-		key_t key;
-		int shmid;
-		void *shmaddr;
-		long BufferSize;
+private:
+	key_t key;
+	int shmid;
+	void *shmaddr;
+	long BufferSize;
 
-    public:
+public:
 	Transmitter(std::string dest, const Config::Config &conf);
 	using AbstractTransmitter::send;
 	long send(const char *buf, long size) override;
