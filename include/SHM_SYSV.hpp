@@ -1,18 +1,18 @@
 /*
  * @Author: Haoyu Chen <null-qwerty@outlook.com>
- * @Date: 2023-12-28 00:30:12
+ * @Date: 2023-12-30 01:30:12
  * @LastEditors: Haoyu Chen <null-qwerty@outlook.com>
- * @FilePath: /IPC-framework/include/SYSV.hpp
- * @Description: SYS V 共享内存后端
+ * @FilePath: /IPC-framework/include/SHM_SYSV.hpp
+ * @Description: System V 共享内存后端
  * Copyright (c) 2023 by Haoyu Chen, All Rights Reserved. 
  */
-#ifndef HEADER_SYSV
-#define HEADER_SYSV
+#ifndef HEADER_SHM_SYSV
+#define HEADER_SHM_SYSV
 #include "Transceiver.hpp"
 #include <unistd.h>
 #include <sys/shm.h>
 
-namespace Transceiver::SYSV
+namespace Transceiver::SHM_SYSV
 {
 class Receiver : virtual public AbstractReceiver {
 	private:

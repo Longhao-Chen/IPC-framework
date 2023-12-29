@@ -1,9 +1,9 @@
 /*
  * @Author: Haoyu Chen <null-qwerty@outlook.com>
- * @Date: 2023-12-28 01:30:39
+ * @Date: 2023-12-30 01:30:39
  * @LastEditors: Haoyu Chen <null-qwerty@outlook.com>
- * @FilePath: /IPC-framework/test/SYSV.cpp
- * @Description: 测试 SHM 后端的功能
+ * @FilePath: /IPC-framework/test/SHM_SYSV.cpp
+ * @Description: 测试 SHM_SYSV 后端的功能
  * Copyright (c) 2023 by Haoyu Chen, All Rights Reserved. 
  */
 
@@ -18,10 +18,10 @@
 #include <Message.hpp>
 #include <ERROR.hpp>
 
-TEST(SYSV, SYSVReceiverTransmitter)
+TEST(SHM_SYSV, SHM_SYSVReceiverTransmitter)
 {
 	Config::Config conf;
-	conf.set("BackEnd", "SYSV");
+	conf.set("BackEnd", "SHM_SYSV");
 	int i = 10; // 发送次数
 	long int size = 1280 * 1024 * 3 * sizeof(int);
     conf.set("BufferSize", std::to_string(size));

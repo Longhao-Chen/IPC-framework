@@ -1,15 +1,15 @@
 /*
  * @Author: Haoyu Chen <null-qwerty@outlook.com>
- * @Date: 2023-12-28 00:30:12
+ * @Date: 2023-12-30 01:30:12
  * @LastEditors: Haoyu Chen <null-qwerty@outlook.com>
- * @FilePath: /IPC-framework/BackEnd/SYSV.cpp
- * @Description: SYS V 共享内存后端
+ * @FilePath: /IPC-framework/BackEnd/SHM_SYSV.cpp
+ * @Description: System V 共享内存后端
  * Copyright (c) 2023 by Haoyu Chen, All Rights Reserved.
  */
 
 #include <Config.hpp>
 #include <ERROR.hpp>
-#include <SYSV.hpp>
+#include <SHM_SYSV.hpp>
 #include <string.h>
 #include <utils/StringToNum.hpp>
 #include <sys/stat.h> 
@@ -17,7 +17,7 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 
-Transceiver::SYSV::Receiver::Receiver(std::string name,
+Transceiver::SHM_SYSV::Receiver::Receiver(std::string name,
                                       const Config::Config &conf)
     : AbstractReceiver(name) {
         auto mode = S_IRUSR | S_IWUSR | S_IXUSR;
@@ -38,19 +38,19 @@ Transceiver::SYSV::Receiver::Receiver(std::string name,
             throw ERROR(std::string("Receiver: shmat ERROR, name = ") + name);
     }
 
-long Transceiver::SYSV::Receiver::receive(char *buf, long size) {
+long Transceiver::SHM_SYSV::Receiver::receive(char *buf, long size) {
     if (size > this->BufferSize)
         throw ERROR("Receiver: receive ERROR, size > BufferSize");
     memcpy(buf, this->shmaddr, size);
     return size;
 }
 
-Transceiver::SYSV::Receiver::~Receiver() {
+Transceiver::SHM_SYSV::Receiver::~Receiver() {
     shmdt(this->shmaddr);
     shm_unlink(this->getName().c_str());
 }
 
-Transceiver::SYSV::Transmitter::Transmitter(std::string dest,
+Transceiver::SHM_SYSV::Transmitter::Transmitter(std::string dest,
                                             const Config::Config &conf)
     : AbstractTransmitter(dest) {
         auto mode = S_IRUSR | S_IWUSR | S_IXUSR;
@@ -74,14 +74,14 @@ Transceiver::SYSV::Transmitter::Transmitter(std::string dest,
                         dest);
     }
 
-long Transceiver::SYSV::Transmitter::send(const char *buf, long size) {
+long Transceiver::SHM_SYSV::Transmitter::send(const char *buf, long size) {
     if (size > this->BufferSize)
         throw ERROR("Transmitter: send ERROR, size > BufferSize");
     memcpy(this->shmaddr, buf, size);
     return size;
 }
 
-Transceiver::SYSV::Transmitter::~Transmitter() {
+Transceiver::SHM_SYSV::Transmitter::~Transmitter() {
     shmdt(this->shmaddr);
     shm_unlink(this->getDest().c_str());
 }
