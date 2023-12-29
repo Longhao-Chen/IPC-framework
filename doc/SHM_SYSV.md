@@ -33,7 +33,7 @@
 int main()
 {
 	Config::Config cfg;
-	cfg.set("BackEnd", "SYSV");
+	cfg.set("BackEnd", "SHM_SYSV");
 	cfg.set("BufferSize", std::to_string(DATALENTH));   // 设置共享内存大小
 
 	Transceiver::Receiver srv("foo", cfg);
@@ -79,7 +79,7 @@ g++ Receiver.cpp -lipc_framework -lunwind -lunwind-x86_64 -O3
 int main()
 {
 	Config::Config cfg;
-	cfg.set("BackEnd", "SYSV");
+	cfg.set("BackEnd", "SHM_SYSV");
 	cfg.set("BufferSize", std::to_string(DATALENTH));   // 设置共享内存大小
 
 	Transceiver::Transmitter cli("foo", cfg);
